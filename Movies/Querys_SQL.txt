@@ -1,0 +1,78 @@
+------------------
+      BASIC
+------------------
+-- Question 1: How do you get all data about movies?
+Select *
+FROM movies;
+--Question 2: How do you get all data about directors?
+Select *
+FROM directors;
+--Question 3: Check how many movies are present in the DB
+select count(*)
+FROM movies;
+--Question 4: Can you find James Cameron? Luc Besson? John Woo?
+SELECT *
+FROM directors
+Where name in ( 'James Cameron' , 'Luc Besson', 'John Woo');
+--Question 5: Find all directors with name starting with Steven
+SELECT *
+FROM directors
+WHERE name LIKE 'Steven%';
+--Question 6: How many directors are women?
+SELECT COUNT(*)
+FROM directors
+where gender = 1;
+
+SELECT (COUNT(*) * 100 / (SELECT COUNT(*) FROM directors)) AS percentage
+FROM directors
+GROUP BY gender;
+
+--Question 7: Find the name of the 10 first women directors?
+SELECT name
+FROM directors
+where gender = 1
+LIMIT 10;
+
+------------------
+      ADVANCE
+------------------
+
+--Question 8: What are the 3 most popular movies?
+SELECT original_title, popularity
+FROM movies
+ORDER BY popularity DESC
+LIMIT 3;
+
+--Question 9: What are the 3 most bankable movies?
+SELECT original_title, revenue 
+FROM movies
+ORDER BY revenue DESC
+LIMIT 3;
+
+--Question 10: What is the most awarded average vote since the January 1st, 2000?
+SELECT vote_average, COUNT(*) AS counter
+FROM movies
+GROUP BY vote_average
+ORDER BY counter DESC;
+;
+--Question 11: Which movie(s) were directed by Brenda Chapman?
+select m.original_title, d.name
+from movies m 
+join directors d on d.id = m.director_id
+where d.name = 'Brenda Chapman'
+
+--Question 12: Which director made the most movies?
+select d.name, COUNT(m.id) AS movie_count
+from movies m 
+join directors d on d.id = m.director_id
+group by d.id, d.name
+ORDER BY movie_count DESC
+LIMIT 1;
+
+--Question 13: Which director is the most bankable? revenue
+select d.name, SUM(m.revenue) AS total_revenue
+from movies m 
+join directors d on d.id = m.director_id
+group by d.id, d.name
+ORDER BY total_revenue DESC
+LIMIT 1;
